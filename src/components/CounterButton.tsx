@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { useState } from "react";
+import Button from "@mui/material/Button";
 
 function MyButton() {
-    const [count, setCount] = useState(0);
-  
-    function handleClick() {
-      setCount(count + 1);
-    }
-  
-    return (
-      <button onClick={handleClick}>
-        Clicked {count} times
-      </button>
-    );
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
   }
 
-  export default MyButton;
+  return (
+    <Button variant="contained" onClick={handleClick}>
+      Clicked {count} times
+    </Button>
+  );
+}
+
+export default MyButton;

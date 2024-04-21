@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { axiosInstance } from "../../axios";
 import useAuth from "../../hooks/useAuth";
@@ -9,18 +9,11 @@ export default function Login() {
   const location = useLocation();
   const fromLocation = location?.state?.from?.pathname || "/";
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  function onEmailChange(event: { target: { value: SetStateAction<undefined>; }; }) {
-    setEmail(event.target.value);
-  }
 
-  function onPasswordChange(event) {
-    setPassword(event.target.value);
-  }
-
-  async function onSubmitForm(event) {
+  async function onSubmitForm(event: { preventDefault: () => void; }) {
     event.preventDefault();
 
     setLoading(true);
@@ -36,8 +29,6 @@ export default function Login() {
     
       setAccessToken(response?.data?.access_token);
       setCSRFToken(response.headers["x-csrftoken"]);
-      setEmail();
-      setPassword();
       setLoading(false);
 
       navigate(fromLocation, { replace: true });
@@ -58,7 +49,8 @@ export default function Login() {
             autoComplete="off"
             className="form-control"
             id="email"
-            onChange={onEmailChange}
+            value={email}
+            onChange={e => setEmail(e.target.value)}
           />
         </div>
         <div className="mb-3">
@@ -68,7 +60,7 @@ export default function Login() {
             autoComplete="off"
             className="form-control"
             id="password"
-            onChange={onPasswordChange}
+            onChange={e => setPassword(e.target.value)}
           />
         </div>
         <div className="mb-3">

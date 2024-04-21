@@ -1,3 +1,3 @@
-# Frontend for the TrackMyTrix Paragliding Webapp.
+# Frontend for the TrackMyTrix Paragliding Webapp
 
-App for keeping track of tricks in a run. 
+App for keeping track of tricks in a run
