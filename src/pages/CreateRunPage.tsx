@@ -413,7 +413,6 @@ const TrickManagement: React.FC = () => {
   const [tricks, setTricks] = useState<Trick[]>(availableTricks);
   const [trickTimeline, setTrickTimeline] = useState<TimelineTrick[]>([]);
   const [addCount, setAddCount] = useState(0);
-  const lastTrickRef = useRef<HTMLDivElement>(null);
 
   const toggleProperty = (property: keyof Trick) => (trick: Trick) => {
     const updatedTricks = tricks.map((t) => {
