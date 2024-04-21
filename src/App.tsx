@@ -12,7 +12,6 @@ import AuthMiddleware from "./middleware/Auth";
 import PersistLogin from "./components/auth/PersistLogin";
 import { AuthContextProvider } from "./store/auth-context";
 import CreateRun from "./pages/CreateRunPage";
-import TestPage from './pages/TestPage';
 // Define your routes
 const router = createBrowserRouter([
   {
@@ -24,13 +23,12 @@ const router = createBrowserRouter([
           { path: "/", element: <Home />, index: true },
           { path: "/login", element: <LoginPage /> },
           { path: "/register", element: <RegisterPage /> },
-          { path: "/test", element: <TestPage /> },
+          { path: "/createrun", element: <CreateRun /> },
           {
             element: <AuthMiddleware />, // Additional security layer for specific routes
             children: [
               { path: "/dashboard", element: <Dash /> },
               { path: "/user", element: <User /> },
-              { path: "/createrun", element: <CreateRun /> },
             ],
           },
         ],

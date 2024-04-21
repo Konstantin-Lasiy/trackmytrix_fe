@@ -1,0 +1,10 @@
+.submit-button {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  border-radius: 0;
+  width: 100%; /* Full width */
+  z-index: 1500; /* Ensures it stays on top */
+}

@@ -4,6 +4,7 @@ import * as React from "react";
 import { Trick, TrickSquare, TimelineTrick } from "../components/TrickSquare";
 import { Button, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import "./CreateRunPage.css";
 
 const availableTricks: Trick[] = [
   {
@@ -284,7 +285,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
               width: "25%",
             }}
           >
-             <Typography
+            <Typography
               sx={{
                 textDecoration: isSuccessful ? "inherit" : "line-through",
               }}
@@ -421,6 +422,20 @@ const TrickManagement: React.FC = () => {
     setAddCount(addCount + 1); // Increment the counter
   };
 
+  interface submitButtonProps {
+    tricks: TimelineTrick[];
+  }
+  const SubmitButton: React.FC<submitButtonProps> = ({ tricks }) => {
+    return (
+      <Button
+        className="submit-button"
+        variant="contained"
+        onClick={() => console.log(tricks)}
+      >
+        Submit
+      </Button>
+    );
+  };
   return (
     <>
       <TrickTimeline tricks={trickTimeline} />
@@ -429,6 +444,7 @@ const TrickManagement: React.FC = () => {
         toggleProperty={toggleProperty}
         addTrickToHistory={addTrickToHistory}
       />
+      <SubmitButton tricks={trickTimeline} />
     </>
   );
 };
