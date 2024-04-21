@@ -428,8 +428,17 @@ const TrickManagement: React.FC = () => {
   const SubmitButton: React.FC<submitButtonProps> = ({ tricks }) => {
     return (
       <Button
-        className="submit-button"
         variant="contained"
+        sx={{
+          position: "fixed",
+          left: "0",
+          right: 0,
+          bottom: 0,
+          height: 60,
+          borderRadius: 0,
+          width: "100%" /* Full width */,
+          zIndex: 1500 /* Ensures it stays on top */,
+        }}
         onClick={() => console.log(tricks)}
       >
         Submit
