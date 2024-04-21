@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import { Trick, TrickSquare, TimelineTrick } from "../components/TrickSquare";
@@ -336,6 +336,14 @@ interface TrickTimelineProps {
 }
 
 const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks }) => {
+  const dummy = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // Step 2: Properly check for `current` before calling methods on it
+    if (dummy.current) {
+      dummy.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [tricks]);
+
   return (
     <Box
       sx={{
@@ -360,6 +368,7 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks }) => {
       ) : (
         <Box sx={{ mx: "left" }}>Click On a Trick to Add to Timeline</Box>
       )}
+      <div ref={dummy} />
     </Box>
   );
 };
@@ -403,7 +412,8 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
 const TrickManagement: React.FC = () => {
   const [tricks, setTricks] = useState<Trick[]>(availableTricks);
   const [trickTimeline, setTrickTimeline] = useState<TimelineTrick[]>([]);
-  const [addCount, setAddCount] = useState(0); // Counter for unique keys
+  const [addCount, setAddCount] = useState(0);
+  const lastTrickRef = useRef<HTMLDivElement>(null);
 
   const toggleProperty = (property: keyof Trick) => (trick: Trick) => {
     const updatedTricks = tricks.map((t) => {
@@ -418,7 +428,7 @@ const TrickManagement: React.FC = () => {
   const addTrickToHistory = (trickToAdd: Trick) => {
     const uniqueId = `${trickToAdd.id}-${addCount}`; // Create a unique ID using a counter
     const newTrick: TimelineTrick = { ...trickToAdd, id: uniqueId };
-    setTrickTimeline((prev) => [newTrick, ...prev]);
+    setTrickTimeline((prev) => [...prev, newTrick]);
     setAddCount(addCount + 1); // Increment the counter
   };
 
