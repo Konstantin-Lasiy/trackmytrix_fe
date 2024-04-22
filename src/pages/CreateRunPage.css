@@ -1,3 +1,5 @@
-@media (hover: hover) and (pointer: fine) {
-    a:hover { color: red; }
+@media (hover: none) {
+    .my-hover-class:hover {
+      /* Reset or override hover styles */
+    }
   }
