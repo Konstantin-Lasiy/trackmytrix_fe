@@ -213,7 +213,6 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
   const [isSuccessful, setIsSuccessful] = useState(trick.successful);
 
   const handleToggle = (property: keyof Trick) => {
-    console.log(property);
     switch (property) {
       case "right":
         toggleOrientation(trick);
@@ -333,16 +332,19 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
 
 interface TrickTimelineProps {
   tricks: TimelineTrick[];
+  onDelete: (id: string) => void;
 }
 
-const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks }) => {
+const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
   const dummy = useRef<HTMLDivElement>(null);
+  const prevTimelineLength = useRef<number>(tricks.length);
+
   useEffect(() => {
-    // Step 2: Properly check for `current` before calling methods on it
-    if (dummy.current) {
+    if (dummy.current && prevTimelineLength.current < tricks.length) {
       dummy.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [tricks]);
+    prevTimelineLength.current = tricks.length;
+  }, [tricks.length]);
 
   return (
     <Box
@@ -364,7 +366,13 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks }) => {
       }}
     >
       {tricks.length > 0 ? (
-        tricks.map((trick) => <TrickSquare key={trick.id} trick={trick} />)
+        tricks.map((trick) => (
+          <TrickSquare
+            key={trick.id}
+            trick={trick}
+            onDelete={() => onDelete(trick.id)}
+          />
+        ))
       ) : (
         <Box sx={{ mx: "left" }}>Click On a Trick to Add to Timeline</Box>
       )}
@@ -414,6 +422,10 @@ const TrickManagement: React.FC = () => {
   const [trickTimeline, setTrickTimeline] = useState<TimelineTrick[]>([]);
   const [addCount, setAddCount] = useState(0);
 
+  const deleteTrickFromHistory = (id: string) => {
+    setTrickTimeline(trickTimeline.filter((trick) => trick.id !== id));
+  };
+
   const toggleProperty = (property: keyof Trick) => (trick: Trick) => {
     const updatedTricks = tricks.map((t) => {
       if (t.id === trick.id) {
@@ -456,7 +468,7 @@ const TrickManagement: React.FC = () => {
   };
   return (
     <>
-      <TrickTimeline tricks={trickTimeline} />
+      <TrickTimeline tricks={trickTimeline} onDelete={deleteTrickFromHistory} />
       <AvailableTrickList
         tricks={tricks}
         toggleProperty={toggleProperty}

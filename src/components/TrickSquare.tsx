@@ -1,5 +1,7 @@
 import Box from "@mui/material/Box";
 import { SxProps, Theme } from "@mui/system";
+import { Button } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface BaseTrick {
   name: string;
@@ -20,11 +22,13 @@ export interface TimelineTrick extends BaseTrick {
 interface TrickSquareProps {
   trick: Trick | TimelineTrick;
   onClick?: () => void;
+  onDelete?: () => void;
   sx?: SxProps<Theme>;
 }
 export const TrickSquare: React.FC<TrickSquareProps> = ({
   trick,
   onClick,
+  onDelete,
   sx,
 }) => {
   const offset = "-9%";
@@ -36,11 +40,11 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
     padding: "5%",
     color: "white",
     fontSize: "0.7rem",
-    boxShadow: '0 0 0 2px #fff',
+    boxShadow: "0 0 0 2px #fff",
     display: "flex",
-    alignItems: "center",  // Center content vertically
-    justifyContent: "center",  // Center content horizontally
-  }
+    alignItems: "center", // Center content vertically
+    justifyContent: "center", // Center content horizontally
+  };
   return (
     <Box
       sx={{
@@ -104,6 +108,29 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
         >
           T
         </Box>
+      )}
+      {onDelete && (
+        <Button
+          component="span"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          sx={{
+            position: "absolute",
+            top: offset,
+            right: offset,
+            minWidth: "auto",
+            color: "white",
+            backgroundColor: "rgba(0,0,0,1)",
+            borderRadius: "50%",
+            padding: "0.25em",
+            width: "35%",
+            height: "35%",
+          }}
+        >
+          <CloseIcon fontSize="small" />
+        </Button>
       )}
     </Box>
   );
