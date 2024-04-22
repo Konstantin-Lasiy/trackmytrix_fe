@@ -1,5 +1,5 @@
-@media (hover: none) {
-    .my-hover-class:hover {
-      /* Reset or override hover styles */
+@media (hover) {
+    my:hover {
+      color: red;
     }
   }
