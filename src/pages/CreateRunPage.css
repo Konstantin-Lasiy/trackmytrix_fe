@@ -1,5 +1,7 @@
-@media (hover) {
-    my:hover {
-      color: red;
+@media (hover: hover) {
+    .delete-button:hover {
+        color: red; /* Change to any color you need for the hover state */
+        background-color: #000; /* Optional: change background on hover */
+        cursor: pointer; /* Changes cursor to pointer to indicate it's clickable */
     }
-  }
+}

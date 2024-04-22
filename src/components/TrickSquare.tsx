@@ -111,6 +111,7 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
       )}
       {onDelete && (
         <Button
+          className= "delete-button"
           component="span"
           onClick={(e) => {
             e.stopPropagation();
