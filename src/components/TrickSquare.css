@@ -1,0 +1,7 @@
+@media (hover: none) {
+    .delete-button:hover {
+      background-color: rgba(0,0,0,1) !important; /* Keep the same background color */
+      color: white !important; /* Maintain text color */
+    }
+  }
+  

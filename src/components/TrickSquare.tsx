@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import { SxProps, Theme } from "@mui/system";
 import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import "./TrickSquare.css";
 
 interface BaseTrick {
   name: string;
@@ -111,7 +112,7 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
       )}
       {onDelete && (
         <Button
-          className= "delete-button"
+          className="delete-button"
           component="span"
           onClick={(e) => {
             e.stopPropagation();
