@@ -23,12 +23,12 @@ const router = createBrowserRouter([
           { path: "/", element: <Home />, index: true },
           { path: "/login", element: <LoginPage /> },
           { path: "/register", element: <RegisterPage /> },
-          { path: "/createrun", element: <CreateRun /> },
           {
             element: <AuthMiddleware />, // Additional security layer for specific routes
             children: [
               { path: "/dashboard", element: <Dash /> },
               { path: "/user", element: <User /> },
+              { path: "/createrun", element: <CreateRun /> },
             ],
           },
         ],

@@ -1,11 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import * as React from "react";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { Trick, TrickSquare, TimelineTrick } from "../components/TrickSquare";
 import { Button, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import "./CreateRunPage.css";
-
+import axios from "axios";
 const availableTricks: Trick[] = [
   {
     id: 1,
@@ -447,6 +448,50 @@ const TrickManagement: React.FC = () => {
     tricks: TimelineTrick[];
   }
   const SubmitButton: React.FC<submitButtonProps> = ({ tricks }) => {
+    const axiosPrivateInstance = useAxiosPrivate();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const filteredTricks = tricks.map(
+      ({ name, right, reverse, twisted, successful }) => ({
+        name,
+        right,
+        reverse,
+        twisted,
+        successful,
+      })
+    );
+    const handleSubmit = async () => {
+      if (tricks.length === 0) {
+        alert("Please add a trick to your timeline");
+        return;
+      }
+
+      try {
+        const response = await axiosPrivateInstance.post("api/upload_tricks/", {
+          filteredTricks,
+        });
+        if (response.status === 200 || response.status === 201) {
+          console.log("Success", response.data);
+          alert("Submitted successfully");
+        } else {
+          throw new Error(response.data?.message || "Something went wrong");
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error("Axios Error", error.response);
+          alert(
+            "Failed to submit: " +
+              (error.response?.data.message || "unknown error occurred")
+          );
+        } else if (error instanceof Error) {
+          console.error("Error", error);
+          alert("Failed to submit: " + error.message);
+        } else {
+          console.error("Unknown Error", error);
+          alert("Failed to submit: unknown error occured.");
+        }
+      }
+    };
+
     return (
       <Button
         variant="contained"
@@ -460,7 +505,7 @@ const TrickManagement: React.FC = () => {
           width: "100%" /* Full width */,
           zIndex: 1500 /* Ensures it stays on top */,
         }}
-        onClick={() => console.log(tricks)}
+        onClick={handleSubmit}
       >
         Submit
       </Button>
