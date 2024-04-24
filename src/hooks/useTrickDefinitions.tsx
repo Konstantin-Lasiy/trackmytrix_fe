@@ -12,10 +12,14 @@ const useTrickDefinitions = () => {
     const fetchTrickDefinitions = async () => {
       try {
         setLoading(true);
-        const response = await axiosPrivateInstance.get(
+        const response = await axiosPrivateInstance.get<Trick[]>(
           "/api/trick_definitions"
         );
-        setTrickDefinitions(response.data); // Ensure your API returns the data correctly formatted
+        const loaded_tricks = response.data.map((trick) => ({
+          ...trick,
+          successful: true,
+        }));
+        setTrickDefinitions(loaded_tricks); // Ensure your API returns the data correctly formatted
         console.log("Trick definitions:", response.data);
       } catch (error) {
         if (error instanceof Error) {
