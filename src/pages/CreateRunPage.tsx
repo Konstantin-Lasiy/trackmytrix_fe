@@ -7,189 +7,8 @@ import { Button, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import "./CreateRunPage.css";
 import axios from "axios";
-const availableTricks: Trick[] = [
-  {
-    id: 1,
-    name: "Heli",
-    right: true,
-    reverse: false,
-    twisted: false,
-    successful: true,
-  },
-  {
-    id: 2,
-    name: "MacTwist",
-    right: true,
-    reverse: false,
-    twisted: false,
-    successful: true,
-  },
-  {
-    id: 3,
-    name: "Cork",
-    right: true,
-    reverse: false,
-    twisted: false,
-    successful: false,
-  },
-  {
-    id: 4,
-    name: "SS2I",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 5,
-    name: "Misty",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 6,
-    name: "Joker",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 7,
-    name: "Full Stall",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 8,
-    name: "Twister",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 9,
-    name: "Twisty Twist",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 10,
-    name: "Rhythmic",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 11,
-    name: "SAT",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 12,
-    name: "Spiral",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 13,
-    name: "SAT2Heli",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 14,
-    name: "Wingover",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 15,
-    name: "Heli2SAT",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 16,
-    name: "Tumble",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-  {
-    id: 17,
-    name: "Misty2Tumble",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
+import useTrickDefinitions from "../hooks/useTrickDefinitions";
 
-  {
-    id: 18,
-    name: "Booster",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-
-  {
-    id: 19,
-    name: "Loop",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-
-  {
-    id: 20,
-    name: "Asymmetric Spiral",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-
-  {
-    id: 21,
-    name: "Asymmetric SAT",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-
-  {
-    id: 22,
-    name: "Dynamic Stall",
-    right: true,
-    reverse: false,
-    twisted: true,
-    successful: true,
-  },
-];
 
 interface TrickModifierProps {
   trick: Trick;
@@ -393,7 +212,7 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
   toggleProperty,
   addTrickToHistory,
 }) => {
-  return (
+    return (
     <Box
       sx={{
         display: "flex",
@@ -418,25 +237,27 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
   );
 };
 
+
 const TrickManagement: React.FC = () => {
-  const [tricks, setTricks] = useState<Trick[]>(availableTricks);
+  const { trickDefinitions, isLoading, setTrickDefinitions } = useTrickDefinitions();
   const [trickTimeline, setTrickTimeline] = useState<TimelineTrick[]>([]);
   const [addCount, setAddCount] = useState(0);
 
   const deleteTrickFromHistory = (id: string) => {
     setTrickTimeline(trickTimeline.filter((trick) => trick.id !== id));
   };
+    if (isLoading) return <p>Loading tricks...</p>;
 
   const toggleProperty = (property: keyof Trick) => (trick: Trick) => {
-    const updatedTricks = tricks.map((t) => {
+    const updatedTricks = trickDefinitions.map((t) => {
       if (t.id === trick.id) {
         return { ...t, [property]: !t[property] };
       }
       return t;
     });
-    setTricks(updatedTricks);
+    setTrickDefinitions(updatedTricks);
   };
-
+  if (isLoading) return <p>Loading tricks...</p>;
   const addTrickToHistory = (trickToAdd: Trick) => {
     const uniqueId = `${trickToAdd.id}-${addCount}`; // Create a unique ID using a counter
     const newTrick: TimelineTrick = { ...trickToAdd, id: uniqueId };
@@ -451,8 +272,8 @@ const TrickManagement: React.FC = () => {
     const axiosPrivateInstance = useAxiosPrivate();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const filteredTricks = tricks.map(
-      ({ name, right, reverse, twisted, successful }) => ({
-        name,
+      ({ id, right, reverse, twisted, successful }) => ({
+        id,
         right,
         reverse,
         twisted,
@@ -515,7 +336,7 @@ const TrickManagement: React.FC = () => {
     <>
       <TrickTimeline tricks={trickTimeline} onDelete={deleteTrickFromHistory} />
       <AvailableTrickList
-        tricks={tricks}
+        tricks={trickDefinitions}
         toggleProperty={toggleProperty}
         addTrickToHistory={addTrickToHistory}
       />
