@@ -8,7 +8,16 @@ import Typography from "@mui/material/Typography";
 import "./CreateRunPage.css";
 import axios from "axios";
 import useTrickDefinitions from "../hooks/useTrickDefinitions";
+import { styled } from "@mui/material/styles";
 
+const StyledToggleButton = styled(ToggleButton)(() => ({
+  width: "100px",
+  "&.Mui-disabled": {
+    "& .MuiTypography-root": {
+      opacity: 0.15, // Setting opacity to show the button is disabled but keep text more readable
+    },
+  },
+})) as typeof ToggleButton;
 
 interface TrickModifierProps {
   trick: Trick;
@@ -31,7 +40,6 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
   const [isReverse, setIsReverse] = useState(trick.reverse);
   const [isTwisted, setIsTwisted] = useState(trick.twisted);
   const [isSuccessful, setIsSuccessful] = useState(trick.successful);
-
   const handleToggle = (property: keyof Trick) => {
     switch (property) {
       case "right":
@@ -93,10 +101,11 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
               borderRadius: "0",
               bordercolor: "grey",
             }}
+            {...(!trick.has_orientation ? { disabled: true } : {})}
           >
             {isRight ? "Right" : "Left"}
           </Button>
-          <ToggleButton
+          <StyledToggleButton
             value="successful"
             selected={trick.successful}
             onChange={() => handleToggle("successful")}
@@ -111,14 +120,15 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             >
               Success
             </Typography>
-          </ToggleButton>
-          <ToggleButton
+          </StyledToggleButton>
+          <StyledToggleButton
             value="reverse"
             selected={trick.reverse}
             onChange={() => handleToggle("reverse")}
             sx={{
               width: "25%",
             }}
+            {...(trick.reverse_bonus == 0 ? { disabled: true } : {})}
           >
             <Typography
               sx={{
@@ -127,14 +137,15 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             >
               Reverse
             </Typography>
-          </ToggleButton>
-          <ToggleButton
+          </StyledToggleButton>
+          <StyledToggleButton
             value="twisted"
             selected={trick.twisted}
             onChange={() => handleToggle("twisted")}
             sx={{
               width: "25%",
             }}
+            {...(trick.twisted_bonus == 0 ? { disabled: true } : {})}
           >
             <Typography
               sx={{
@@ -143,7 +154,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             >
               Twisted
             </Typography>
-          </ToggleButton>
+          </StyledToggleButton>
         </ToggleButtonGroup>
       </Box>
     </Box>
@@ -152,7 +163,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
 
 interface TrickTimelineProps {
   tricks: TimelineTrick[];
-  onDelete: (id: string) => void;
+  onDelete: (timeline_id: string) => void;
 }
 
 const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
@@ -188,9 +199,9 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
       {tricks.length > 0 ? (
         tricks.map((trick) => (
           <TrickSquare
-            key={trick.id}
+            key={trick.timeline_id}
             trick={trick}
-            onDelete={() => onDelete(trick.id)}
+            onDelete={() => onDelete(trick.timeline_id)}
           />
         ))
       ) : (
@@ -212,7 +223,7 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
   toggleProperty,
   addTrickToHistory,
 }) => {
-    return (
+  return (
     <Box
       sx={{
         display: "flex",
@@ -237,16 +248,18 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
   );
 };
 
-
 const TrickManagement: React.FC = () => {
-  const { trickDefinitions, isLoading, setTrickDefinitions } = useTrickDefinitions();
+  const { trickDefinitions, isLoading, setTrickDefinitions } =
+    useTrickDefinitions();
   const [trickTimeline, setTrickTimeline] = useState<TimelineTrick[]>([]);
   const [addCount, setAddCount] = useState(0);
 
-  const deleteTrickFromHistory = (id: string) => {
-    setTrickTimeline(trickTimeline.filter((trick) => trick.id !== id));
+  const deleteTrickFromHistory = (timeline_id: string) => {
+    setTrickTimeline(
+      trickTimeline.filter((trick) => trick.timeline_id !== timeline_id)
+    );
   };
-    if (isLoading) return <p>Loading tricks...</p>;
+  if (isLoading) return <p>Loading tricks...</p>;
 
   const toggleProperty = (property: keyof Trick) => (trick: Trick) => {
     const updatedTricks = trickDefinitions.map((t) => {
@@ -260,7 +273,7 @@ const TrickManagement: React.FC = () => {
   if (isLoading) return <p>Loading tricks...</p>;
   const addTrickToHistory = (trickToAdd: Trick) => {
     const uniqueId = `${trickToAdd.id}-${addCount}`; // Create a unique ID using a counter
-    const newTrick: TimelineTrick = { ...trickToAdd, id: uniqueId };
+    const newTrick: TimelineTrick = { ...trickToAdd, timeline_id: uniqueId };
     setTrickTimeline((prev) => [...prev, newTrick]);
     setAddCount(addCount + 1); // Increment the counter
   };
@@ -270,6 +283,7 @@ const TrickManagement: React.FC = () => {
   }
   const SubmitButton: React.FC<submitButtonProps> = ({ tricks }) => {
     const axiosPrivateInstance = useAxiosPrivate();
+    console.log(tricks);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const filteredTricks = tricks.map(
       ({ id, right, reverse, twisted, successful }) => ({

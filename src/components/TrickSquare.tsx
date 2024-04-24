@@ -3,21 +3,33 @@ import { SxProps, Theme } from "@mui/system";
 import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import "./TrickSquare.css";
+import { styled } from "@mui/material/styles";
 
-interface BaseTrick {
+export interface Trick {
   name: string;
+  id: number;
   right: boolean;
   reverse: boolean;
   twisted: boolean;
   successful: boolean;
+  has_orientation: boolean;
+  cab_slide_bonus: number;
+  description: "";
+  devil_twist_bonus: number;
+  devil_twist_stall_bonus: number;
+  double_flipped_bonus: number;
+  flipped_bonus: number;
+  full_twisted_bonus: number;
+  hardcore_enty_bonus: number;
+  restrictions: [];
+  reverse_bonus: number;
+  technical_coefficient: number;
+  twisted_bonus: number;
+  twisted_exit_bonus: number;
 }
 
-export interface Trick extends BaseTrick {
-  id: number;
-}
-
-export interface TimelineTrick extends BaseTrick {
-  id: string;
+export interface TimelineTrick extends Trick {
+  timeline_id: string;
 }
 
 interface TrickSquareProps {
@@ -26,64 +38,73 @@ interface TrickSquareProps {
   onDelete?: () => void;
   sx?: SxProps<Theme>;
 }
+
+const TrickBox = styled(Box)(() => ({
+  position: "relative",
+  width: "50px",
+  height: "50px",
+  borderRadius: "5%", // Fully rounded
+  borderColor: "black",
+  borderStyle: "solid",
+  boxShadow: "0px 0px 5px 0px rgba(0,0,0,0.75)",
+  borderWidth: "1px",
+  margin: "5px",
+  minWidth: "50px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  fontSize: "12px",
+  color: "white",
+  overflow: "visible",
+  cursor: "pointer",
+})) as typeof Box;
+
+const littleCircleStyles = {
+  width: "30%",
+  height: "30%",
+  borderRadius: "50%",
+  backgroundColor: "#201658",
+  padding: "5%",
+  color: "white",
+  fontSize: "0.7rem",
+  boxShadow: "0 0 0 2px #fff",
+  display: "flex",
+  alignItems: "center", // Center content vertically
+  justifyContent: "center", // Center content horizontally
+};
+
+const offset = "-9%";
+
 export const TrickSquare: React.FC<TrickSquareProps> = ({
   trick,
   onClick,
   onDelete,
   sx,
 }) => {
-  const offset = "-9%";
-  const littleCircleStyles = {
-    width: "30%",
-    height: "30%",
-    borderRadius: "50%",
-    backgroundColor: "#201658",
-    padding: "5%",
-    color: "white",
-    fontSize: "0.7rem",
-    boxShadow: "0 0 0 2px #fff",
-    display: "flex",
-    alignItems: "center", // Center content vertically
-    justifyContent: "center", // Center content horizontally
-  };
   return (
-    <Box
+    <TrickBox
       sx={{
-        position: "relative",
-        width: "50px",
-        height: "50px",
-        borderRadius: "5%", // Fully rounded
-        borderColor: "black",
-        borderStyle: "solid",
-        boxShadow: 3,
-        borderWidth: "1px",
         backgroundColor: trick.successful ? "#2a9d85" : "#db504a",
-        margin: "5px",
-        minWidth: "50px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "12px",
-        color: "white",
-        overflow: "visible",
-        cursor: "pointer", // Indicating it's clickable
-        ...sx, // Optional
+        ...sx,
       }}
       onClick={onClick}
     >
       <div>{trick.name}</div>
-      <Box
-        component="span"
-        sx={{
-          position: "absolute",
-          top: offset,
-          left: offset,
-          ...littleCircleStyles,
-        }}
-      >
-        {trick.right === true ? "R" : "L"}
-      </Box>
+      {trick.has_orientation && (
+        <Box
+          component="span"
+          sx={{
+            position: "absolute",
+            top: offset,
+            left: offset,
+            ...littleCircleStyles,
+          }}
+        >
+          {trick.right === true ? "R" : "L"}
+        </Box>
+      )}
+
       {trick.reverse && (
         <Box
           component="span"
@@ -134,6 +155,6 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
           <CloseIcon fontSize="small" />
         </Button>
       )}
-    </Box>
+    </TrickBox>
   );
 };
