@@ -10,6 +10,7 @@ import Menu from "@mui/material/Menu";
 import useAuth from "../hooks/useAuth";
 import { Box } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function MenuAppBar() {
   const { user } = useAuth();
@@ -72,9 +73,16 @@ export default function MenuAppBar() {
               <NavLink to="/user">User</NavLink>
             </MenuItem>
           </Menu>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            sx={{ flexGrow: 1, textDecoration: "none", color: "white" }}
+          >
             TrackMyTrix
           </Typography>
+
           {loggedIn && (
             <div>
               <IconButton
