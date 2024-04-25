@@ -259,7 +259,7 @@ const TrickManagement: React.FC = () => {
       trickTimeline.filter((trick) => trick.timeline_id !== timeline_id)
     );
   };
-  if (isLoading) return <p>Loading tricks...</p>;
+  if (isLoading) return <p></p>;
 
   const toggleProperty = (property: keyof Trick) => (trick: Trick) => {
     const updatedTricks = trickDefinitions.map((t) => {
