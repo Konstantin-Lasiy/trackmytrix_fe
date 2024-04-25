@@ -41,7 +41,7 @@ const Dash: React.FC = () => {
 
   return (
     <div>
-      <h1>Acro data Dashboard</h1>
+      <h1>Daily Weight Tracker</h1>
       {weightData.length > 0 ? (
         <ul>
           {weightData.map((entry, index) => (
@@ -51,7 +51,7 @@ const Dash: React.FC = () => {
           ))}
         </ul>
       ) : (
-        <p>Nothing Yet.</p>
+        <p>No weight data available.</p>
       )}
 
       <Fab sx={fab.sx} color="primary" aria-label="add">
