@@ -19,6 +19,8 @@ interface AuthContextType {
   setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
   csrftoken: string | null;
   setCSRFToken: React.Dispatch<React.SetStateAction<string | null>>;
+  // loading : boolean;
+  // setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -30,6 +32,8 @@ export const AuthContext = createContext<AuthContextType>({
   setRefreshToken: () => {},
   csrftoken: null,
   setCSRFToken: () => {},
+  // loading : true,
+  // setLoading: () => {},
 });
 
 export const AuthContextProvider = ({ children }: Props) => {
@@ -37,6 +41,7 @@ export const AuthContextProvider = ({ children }: Props) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [csrftoken, setCSRFToken] = useState<string | null>(null);
+  // const [loading, setLoading] = useState<boolean>(true);
 
   return (
     <AuthContext.Provider
@@ -49,6 +54,8 @@ export const AuthContextProvider = ({ children }: Props) => {
         setRefreshToken,
         csrftoken,
         setCSRFToken,
+        // loading,
+        // setLoading,
       }}
     >
       {children}
