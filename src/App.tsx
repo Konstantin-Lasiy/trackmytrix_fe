@@ -12,6 +12,8 @@ import AuthMiddleware from "./middleware/Auth";
 import PersistLogin from "./components/auth/PersistLogin";
 import { AuthContextProvider } from "./store/auth-context";
 import CreateRun from "./pages/CreateRunPage";
+import ProfilePage from "./pages/ProfilePage";
+
 // Define your routes
 const router = createBrowserRouter([
   {
@@ -28,6 +30,7 @@ const router = createBrowserRouter([
             children: [
               { path: "/dashboard", element: <Dash /> },
               { path: "/user", element: <User /> },
+              { path: "/profile", element: <ProfilePage /> },
               { path: "/createrun", element: <CreateRun /> },
             ],
           },

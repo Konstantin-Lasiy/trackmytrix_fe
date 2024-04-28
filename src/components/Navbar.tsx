@@ -9,11 +9,17 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import useAuth from "../hooks/useAuth";
 import { Box } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Logout } from "@mui/icons-material";
+import useLogout from "../hooks/useLogout";
 
 export default function MenuAppBar() {
   const { user } = useAuth();
+  const logout = useLogout();
+ // const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
+
   const [accountAnchorEl, setAccountAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const [mainAnchorEl, setMainAnchorEl] = React.useState<null | HTMLElement>(
@@ -34,6 +40,17 @@ export default function MenuAppBar() {
 
   const handleClose = () => {
     setAccountAnchorEl(null);
+  };
+
+  const goToProfile = () => {
+    setAccountAnchorEl(null);
+    navigate("/profile");
+  };
+  const handleLogout = async () => {
+   // setLoading(true);
+    await logout();
+    //setLoading(false);
+    navigate("/");
   };
 
   const loggedIn = user ? true : false;
@@ -110,8 +127,10 @@ export default function MenuAppBar() {
                 open={Boolean(accountAnchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={goToProfile}>Profile</MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <Logout />
+                </MenuItem>
               </Menu>
             </div>
           )}
