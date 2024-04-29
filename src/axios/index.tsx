@@ -15,6 +15,17 @@ export const axiosInstance = axios.create({
   },
 });
 
+axiosInstance.interceptors.request.use(
+  (request) => {
+    console.log("Starting Request", JSON.stringify(request, null, 2));
+    return request;
+  },
+  (error) => {
+    console.log("Request Error", error);
+    return Promise.reject(error);
+  }
+);
+
 export const axiosPrivateInstance = axios.create({
   baseURL: BACKEND_URL,
   withCredentials: true,

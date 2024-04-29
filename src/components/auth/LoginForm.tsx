@@ -27,7 +27,6 @@ export default function SignIn() {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
-    console.log(data);
     try {
       const response = await axiosInstance.post(
         "auth/login",
