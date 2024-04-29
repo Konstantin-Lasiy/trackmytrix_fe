@@ -1,8 +1,9 @@
 import axios from "axios";
-const DEV = import.meta.env.DEV ? true : false;
-
+const DEV = import.meta.env.VITE_DEV == true ? true : false;
+console.log("import DEV", import.meta.env.DEV);
+console.log("DEV", DEV);
 const BACKEND_URL = DEV
-  ? "http://127.0.0.1:8000"
+  ? import.meta.env.VITE_API_BACKEND_DEV
   : import.meta.env.VITE_API_BACKEND;
 
 console.log("BACKEND_URL: ", BACKEND_URL);
