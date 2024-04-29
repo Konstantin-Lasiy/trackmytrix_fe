@@ -16,14 +16,13 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { useLocation } from "react-router-dom";
 
 export default function SignIn() {
   const { setAccessToken, setCSRFToken } = useAuth();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const fromLocation = location?.state?.from?.pathname || "/";
+  //const location = useLocation();
+ // const fromLocation = location?.state?.from?.pathname || "/";
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -40,7 +39,7 @@ export default function SignIn() {
       setAccessToken(response?.data?.access);
       setCSRFToken(response?.headers?.["x-csrftoken"]);
       setLoading(false);
-      navigate(fromLocation, { replace: true });
+      // navigate(fromLocation, { replace: true });
       navigate('/');
     } catch (error) {
       console.error(error);
