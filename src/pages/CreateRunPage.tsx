@@ -283,7 +283,6 @@ const TrickManagement: React.FC = () => {
   }
   const SubmitButton: React.FC<submitButtonProps> = ({ tricks }) => {
     const axiosPrivateInstance = useAxiosPrivate();
-    console.log(tricks);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const filteredTricks = tricks.map(
       ({ id, right, reverse, twisted, successful }) => ({

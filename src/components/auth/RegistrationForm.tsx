@@ -38,7 +38,6 @@ const RegistrationForm: React.FC = () => {
         password: data.get("password"),
         password2: data.get("password2"),
       });
-      console.log(request);
       const response = await axiosInstance.post("auth/register", request);
       handleRegistrationSuccess(response.data);
     } catch (error) {

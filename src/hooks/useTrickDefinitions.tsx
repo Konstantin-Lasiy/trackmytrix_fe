@@ -20,7 +20,6 @@ const useTrickDefinitions = () => {
           successful: true,
         }));
         setTrickDefinitions(loaded_tricks); // Ensure your API returns the data correctly formatted
-        console.log("Trick definitions:", response.data);
       } catch (error) {
         if (error instanceof Error) {
           console.error("Failed to fetch trick definitions:", error);
