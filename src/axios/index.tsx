@@ -1,8 +1,7 @@
 import axios from "axios";
-const DEV = import.meta.env.VITE_DEV == true ? true : false;
-console.log("import DEV", import.meta.env.DEV);
-console.log("DEV", DEV);
-const BACKEND_URL = "https://api.trackmytrix.org";
+const BACKEND_URL = import.meta.env.VITE_DEV == true
+  ? "http://localhost:8000/api"
+  : import.meta.env.VITE_API_BACKEND;
 
 console.log("BACKEND_URL: ", BACKEND_URL);
 export const axiosInstance = axios.create({
