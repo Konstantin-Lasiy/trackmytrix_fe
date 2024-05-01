@@ -1,7 +1,4 @@
-#home {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    min-height: 100vh; /* At least the height of the viewport */
-  }
+.main-container {
+    padding-bottom: 0;
+    padding-top: 0;
+}

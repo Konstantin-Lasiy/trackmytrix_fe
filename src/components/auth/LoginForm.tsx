@@ -1,6 +1,5 @@
 import { useState } from "react";
-//import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { axiosInstance } from "../../axios";
 import useAuth from "../../hooks/useAuth";
 import * as React from "react";
@@ -8,8 +7,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -22,7 +19,7 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   //const location = useLocation();
- // const fromLocation = location?.state?.from?.pathname || "/";
+  // const fromLocation = location?.state?.from?.pathname || "/";
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -39,7 +36,7 @@ export default function SignIn() {
       setCSRFToken(response?.headers?.["x-csrftoken"]);
       setLoading(false);
       // navigate(fromLocation, { replace: true });
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -83,10 +80,10 @@ export default function SignIn() {
             id="password"
             autoComplete="current-password"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <Button
             type="submit"
             fullWidth
@@ -97,13 +94,13 @@ export default function SignIn() {
             {loading ? "Loading..." : "Sign In"}
           </Button>
           <Grid container>
-            <Grid item xs>
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component={RouterLink} to="/register" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

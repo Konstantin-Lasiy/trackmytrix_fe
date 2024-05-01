@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import * as React from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { Trick, TrickSquare, TimelineTrick } from "../components/TrickSquare";
-import { Button, ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { Card, Button, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import "./CreateRunPage.css";
 import axios from "axios";
@@ -69,23 +69,23 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
         display: "flex",
         maxWidth: "100vw",
         alignItems: "left",
-        marginBottom: "10px",
+        padding: "0px",
+        borderRadius: "0",
       }}
     >
       <TrickSquare
         trick={trick}
         onClick={() => addTrickToHistory(trick)}
         sx={{
-          minWidth: "80px", // Increased from the default size
-          height: "80px", // Increased from the default size
-          fontSize: "1rem", // Increase font size if needed
+          minWidth: "80px",
+          height: "80px",
+          fontSize: "1rem",
         }}
       />
       <Box
         sx={{
           display: "flex",
           flexDirection: "row",
-          gap: "5px",
           marginLeft: "1px",
           flexWrap: "wrap",
           overflow: "hidden",
@@ -144,6 +144,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             onChange={() => handleToggle("twisted")}
             sx={{
               width: "25%",
+              borderRadius: "0",
             }}
             {...(trick.twisted_bonus == 0 ? { disabled: true } : {})}
           >
@@ -172,13 +173,32 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
 
   useEffect(() => {
     if (dummy.current && prevTimelineLength.current < tricks.length) {
-      dummy.current.scrollIntoView({ behavior: "smooth" });
+      const scrollContainer = dummy.current.parentNode as HTMLElement; // Get the parent container
+
+      if (scrollContainer) {
+        // Calculate the left scroll offset for the dummy element
+        const left = dummy.current.offsetLeft;
+        const containerScrollWidth = scrollContainer.scrollWidth;
+        const containerWidth = scrollContainer.clientWidth;
+
+        // Only scroll if the dummy is not fully visible
+        if (
+          left + dummy.current.clientWidth >
+          containerScrollWidth - containerWidth
+        ) {
+          // Scroll such that the dummy element is fully visible on the right
+          scrollContainer.scrollTo({
+            left: left + dummy.current.clientWidth - containerWidth,
+            behavior: "smooth",
+          });
+        }
+      }
     }
     prevTimelineLength.current = tricks.length;
   }, [tricks.length]);
 
   return (
-    <Box
+    <Card
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -188,13 +208,16 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
         flexWrap: "nowrap",
         "& > *": { flex: "0 0 auto" }, // Prevents flex items from shrinking
         height: "80px", // Fixed height to prevent vertical expansion
-        mt: 2,
         position: "sticky",
-        top: 0,
+        top: 55,
         zIndex: 1000,
+        borderRadius: "0",
         justifyContent: "left", // Start squares on the left of the screen
         backgroundColor: "white",
+        alignItems: "center",
+        padding: "0",
       }}
+      elevation={6}
     >
       {tricks.length > 0 ? (
         tricks.map((trick) => (
@@ -202,13 +225,20 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
             key={trick.timeline_id}
             trick={trick}
             onDelete={() => onDelete(trick.timeline_id)}
+            sx={{
+              fontSize: "0.7rem",
+              textWrap: "wrap",
+            }}
+            small_sx={{
+              fontSize: "0.6rem",
+            }}
           />
         ))
       ) : (
-        <Box sx={{ mx: "left" }}>Click On a Trick to Add to Timeline</Box>
+        <Box sx={{ mx: "left" }}>Click on a trick to add to timeline</Box>
       )}
       <div ref={dummy} />
-    </Box>
+    </Card>
   );
 };
 
@@ -230,10 +260,12 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
         overflow: "hidden",
         flexDirection: "column",
         flexWrap: "wrap",
+        marginTop: "10px",
+        gap: "10px",
       }}
     >
       {tricks.map((trick) => (
-        <Box key={trick.id} sx={{ gap: "1px" }}>
+        <Box key={trick.id}>
           <TrickAddition
             trick={trick}
             toggleOrientation={toggleProperty("right")}
@@ -331,6 +363,7 @@ const TrickManagement: React.FC = () => {
         variant="contained"
         sx={{
           position: "fixed",
+          background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
           left: "0",
           right: 0,
           bottom: 0,
@@ -348,11 +381,13 @@ const TrickManagement: React.FC = () => {
   return (
     <>
       <TrickTimeline tricks={trickTimeline} onDelete={deleteTrickFromHistory} />
-      <AvailableTrickList
-        tricks={trickDefinitions}
-        toggleProperty={toggleProperty}
-        addTrickToHistory={addTrickToHistory}
-      />
+      <div className="run-container">
+        <AvailableTrickList
+          tricks={trickDefinitions}
+          toggleProperty={toggleProperty}
+          addTrickToHistory={addTrickToHistory}
+        />
+      </div>
       <SubmitButton tricks={trickTimeline} />
     </>
   );
@@ -360,9 +395,9 @@ const TrickManagement: React.FC = () => {
 
 const CreateRun: React.FC = () => {
   return (
-    <>
+    <div>
       <TrickManagement />
-    </>
+    </div>
   );
 };
 

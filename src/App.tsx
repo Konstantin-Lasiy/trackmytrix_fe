@@ -1,5 +1,4 @@
 import "./App.css";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import Dash from "./pages/Dash";
@@ -13,6 +12,30 @@ import PersistLogin from "./components/auth/PersistLogin";
 import { AuthContextProvider } from "./store/auth-context";
 import CreateRun from "./pages/CreateRunPage";
 import ProfilePage from "./pages/ProfilePage";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#3f51b5",
+    },
+    secondary: {
+      main: "#000000",
+    },
+    error: {
+      main: "#e86a58",
+    },
+    warning: {
+      main: "#fed45b",
+    },
+    info: {
+      main: "#efeeea",
+    },
+    success: {
+      main: "#9bc7c5",
+    },
+  },
+});
 
 // Define your routes
 const router = createBrowserRouter([
@@ -44,9 +67,11 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <>
-      <AuthContextProvider>
-        <RouterProvider router={router} />
-      </AuthContextProvider>
+      <ThemeProvider theme={theme}>
+        <AuthContextProvider>
+          <RouterProvider router={router} />
+        </AuthContextProvider>
+      </ThemeProvider>
     </>
   );
 };

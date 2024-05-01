@@ -1,15 +1,18 @@
 // In Layout.js
 import Navbar from "../components/Navbar";
 import { Outlet } from "react-router-dom";
-import CssBaseline from '@mui/material/CssBaseline';
+import "./Layout.css";
+//import CssBaseline from "@mui/material/CssBaseline";
 const Layout = () => {
   return (
     <>
-      <header>
+      <header className="navbar">
         <Navbar />
       </header>
-      <CssBaseline></CssBaseline>
-      <Outlet />
+
+      <div className="main-container">
+        <Outlet />
+      </div>
     </>
   );
 };

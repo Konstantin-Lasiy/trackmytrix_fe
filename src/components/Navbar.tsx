@@ -56,7 +56,7 @@ export default function MenuAppBar() {
   const loggedIn = user ? true : false;
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="primary" sx={{ top: "auto", bottom: 0 }}>
+      <AppBar position="fixed" color='secondary' >
         <Toolbar>
           <IconButton
             size="large"

@@ -37,6 +37,7 @@ interface TrickSquareProps {
   onClick?: () => void;
   onDelete?: () => void;
   sx?: SxProps<Theme>;
+  small_sx?: object;
 }
 
 const TrickBox = styled(Box)(() => ({
@@ -61,16 +62,16 @@ const TrickBox = styled(Box)(() => ({
 })) as typeof Box;
 
 const littleCircleStyles = {
-  width: "30%",
-  height: "30%",
+  width: "15%",
+  height: "15%",
   borderRadius: "50%",
   backgroundColor: "#201658",
   padding: "5%",
   color: "white",
-  fontSize: "0.7rem",
-  boxShadow: "0 0 0 2px #fff",
+  fontSize: "0.9rem",
   display: "flex",
   alignItems: "center", // Center content vertically
+  textAlign: "center",
   justifyContent: "center", // Center content horizontally
 };
 
@@ -81,11 +82,16 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
   onClick,
   onDelete,
   sx,
+  small_sx,
 }) => {
   return (
     <TrickBox
       sx={{
-        backgroundColor: trick.successful ? "#2a9d85" : "#db504a",
+        background: trick.successful
+          ? "linear-gradient(-39deg, #4991f8 0%, #4bc1ff 0%)"
+          : "linear-gradient(-39deg, #ff4a4a 0%, #ff7f7f 80%)",
+        textAlign: "center",
+
         ...sx,
       }}
       onClick={onClick}
@@ -99,6 +105,7 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
             top: offset,
             left: offset,
             ...littleCircleStyles,
+            ...small_sx,
           }}
         >
           {trick.right === true ? "R" : "L"}
@@ -148,11 +155,11 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
             backgroundColor: "rgba(0,0,0,1)",
             borderRadius: "50%",
             padding: "0.25em",
-            width: "35%",
-            height: "35%",
+            width: "25%",
+            height: "25%",
           }}
         >
-          <CloseIcon fontSize="small" />
+          <CloseIcon sx={{ color: "white", fontSize: 13 }} />
         </Button>
       )}
     </TrickBox>

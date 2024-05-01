@@ -5,3 +5,8 @@
         cursor: pointer; /* Changes cursor to pointer to indicate it's clickable */
     }
 }
+
+.run-container {
+    padding-bottom: 60px;
+    padding-top: 60px;
+} 
