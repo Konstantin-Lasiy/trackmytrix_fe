@@ -10,12 +10,7 @@ import axios from "axios";
 import useTrickDefinitions from "../hooks/useTrickDefinitions";
 import { styled } from "@mui/material/styles";
 import { StrictModeDroppable } from "../components/droppable/strick_droppable";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 
 const StyledToggleButton = styled(ToggleButton)(() => ({
   width: "100px",
