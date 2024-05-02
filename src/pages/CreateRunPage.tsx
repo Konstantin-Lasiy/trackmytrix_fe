@@ -9,6 +9,13 @@ import "./CreateRunPage.css";
 import axios from "axios";
 import useTrickDefinitions from "../hooks/useTrickDefinitions";
 import { styled } from "@mui/material/styles";
+import { StrictModeDroppable } from "../components/droppable/strick_droppable";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 const StyledToggleButton = styled(ToggleButton)(() => ({
   width: "100px",
@@ -246,37 +253,83 @@ interface AvailableTrickListProps {
   tricks: Trick[];
   toggleProperty: (property: keyof Trick) => (trick: Trick) => void;
   addTrickToHistory: (trick: Trick) => void;
+  setTrickDefinitions: (tricks: Trick[]) => void;
 }
+const reorderTricks = (
+  tricks: Trick[],
+  startIndex: number,
+  endIndex: number
+): Trick[] => {
+  const result = Array.from(tricks);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
+};
 
 const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
   tricks,
   toggleProperty,
   addTrickToHistory,
+  setTrickDefinitions,
 }) => {
+  const onDragEnd = (result: DropResult): void => {
+    if (!result.destination) {
+      return;
+    }
+
+    const updatedTricks = reorderTricks(
+      tricks,
+      result.source.index,
+      result.destination.index
+    );
+
+    setTrickDefinitions(updatedTricks);
+  };
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        overflow: "hidden",
-        flexDirection: "column",
-        flexWrap: "wrap",
-        marginTop: "10px",
-        gap: "10px",
-      }}
-    >
-      {tricks.map((trick) => (
-        <Box key={trick.id}>
-          <TrickAddition
-            trick={trick}
-            toggleOrientation={toggleProperty("right")}
-            toggleReverse={toggleProperty("reverse")}
-            toggleTwisted={toggleProperty("twisted")}
-            toggleSuccessful={toggleProperty("successful")}
-            addTrickToHistory={addTrickToHistory}
-          />
-        </Box>
-      ))}
-    </Box>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <StrictModeDroppable droppableId="droppable-trick-list">
+        {(provided) => (
+          <Box
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              marginTop: "10px",
+              gap: "10px",
+            }}
+          >
+            {tricks.map((trick, index) => (
+              <Draggable
+                key={trick.id.toString()}
+                draggableId={trick.id.toString()}
+                index={index}
+              >
+                {(provided) => (
+                  <Box
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    sx={{ marginBottom: "8px" }}
+                  >
+                    <TrickAddition
+                      trick={trick}
+                      toggleOrientation={toggleProperty("right")}
+                      toggleReverse={toggleProperty("reverse")}
+                      toggleTwisted={toggleProperty("twisted")}
+                      toggleSuccessful={toggleProperty("successful")}
+                      addTrickToHistory={addTrickToHistory}
+                    />
+                  </Box>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </Box>
+        )}
+      </StrictModeDroppable>
+    </DragDropContext>
   );
 };
 
@@ -386,6 +439,7 @@ const TrickManagement: React.FC = () => {
           tricks={trickDefinitions}
           toggleProperty={toggleProperty}
           addTrickToHistory={addTrickToHistory}
+          setTrickDefinitions={setTrickDefinitions}
         />
       </div>
       <SubmitButton tricks={trickTimeline} />
