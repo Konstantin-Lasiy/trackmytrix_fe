@@ -11,6 +11,7 @@ import useTrickDefinitions from "../hooks/useTrickDefinitions";
 import { styled } from "@mui/material/styles";
 import { StrictModeDroppable } from "../components/droppable/strick_droppable";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
+import { useNavigate } from "react-router-dom";
 
 const StyledToggleButton = styled(ToggleButton)(() => ({
   width: "100px",
@@ -333,6 +334,7 @@ const TrickManagement: React.FC = () => {
     useTrickDefinitions();
   const [trickTimeline, setTrickTimeline] = useState<TimelineTrick[]>([]);
   const [addCount, setAddCount] = useState(0);
+  const navigate = useNavigate();
 
   const deleteTrickFromHistory = (timeline_id: string) => {
     setTrickTimeline(
@@ -385,7 +387,10 @@ const TrickManagement: React.FC = () => {
         });
         if (response.status === 200 || response.status === 201) {
           console.log("Success", response.data);
-          alert("Submitted successfully");
+          if (response.data.run_id) {
+            console.log("Has ID");
+            navigate("/runs/" + response.data.run_id);
+          }
         } else {
           throw new Error(response.data?.message || "Something went wrong");
         }

@@ -14,6 +14,7 @@ import CreateRun from "./pages/CreateRunPage";
 import ProfilePage from "./pages/ProfilePage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import RunSummary from "./pages/RunSummaryPage";
+import RunList from "./pages/RunsListPage";
 
 const theme = createTheme({
   palette: {
@@ -56,7 +57,8 @@ const router = createBrowserRouter([
               { path: "/user", element: <User /> },
               { path: "/profile", element: <ProfilePage /> },
               { path: "/createrun", element: <CreateRun /> },
-              { path: "/runs/:id", element:<RunSummary />}
+              { path: "/runs/:id", element: <RunSummary /> },
+              { path: "/runs/", element: <RunList /> },
             ],
           },
         ],

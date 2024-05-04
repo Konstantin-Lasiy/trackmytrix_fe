@@ -17,7 +17,7 @@ import useLogout from "../hooks/useLogout";
 export default function MenuAppBar() {
   const { user } = useAuth();
   const logout = useLogout();
- // const [loading, setLoading] = React.useState(false);
+  // const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
   const [accountAnchorEl, setAccountAnchorEl] =
@@ -47,7 +47,7 @@ export default function MenuAppBar() {
     navigate("/profile");
   };
   const handleLogout = async () => {
-   // setLoading(true);
+    // setLoading(true);
     await logout();
     //setLoading(false);
     navigate("/");
@@ -56,7 +56,7 @@ export default function MenuAppBar() {
   const loggedIn = user ? true : false;
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" color='secondary' >
+      <AppBar position="fixed" color="secondary">
         <Toolbar>
           <IconButton
             size="large"
@@ -84,7 +84,7 @@ export default function MenuAppBar() {
             onClose={handleMainClose}
           >
             <MenuItem onClick={handleClose}>
-              <NavLink to="/dashboard">Dash</NavLink>
+              <NavLink to="/runs/">Runs</NavLink>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <NavLink to="/user">User</NavLink>

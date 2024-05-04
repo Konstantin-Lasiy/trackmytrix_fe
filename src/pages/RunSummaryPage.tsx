@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
+import { AxiosError } from "axios";
 
 interface TrickInstance {
   id: number;
@@ -32,9 +33,11 @@ interface RunData {
   tricks: TrickInstance[];
 }
 
-const calcStats = (tricks: TrickInstance[]): Record<string, number> => {
+const calcStats = (
+  tricks: TrickInstance[] | undefined
+): Record<string, number> => {
   const trickCounts: Record<string, number> = {};
-  tricks.forEach((trick) => {
+  tricks?.forEach((trick) => {
     const trickName = trick.trick_definition.name;
     trickCounts[trickName] = (trickCounts[trickName] || 0) + 1;
   });
@@ -44,11 +47,8 @@ const calcStats = (tricks: TrickInstance[]): Record<string, number> => {
 const RunSummary: React.FC = () => {
   const { id } = useParams();
   const axiosPrivateInstance = useAxiosPrivate();
-  const [runData, setRunData] = useState<RunData>({
-    date: "0",
-    wing: "",
-    tricks: [],
-  });
+  const [runData, setRunData] = useState<RunData>();
+  const [error, setError] = useState("");
   useEffect(() => {
     const fetchRundata = async () => {
       try {
@@ -57,23 +57,29 @@ const RunSummary: React.FC = () => {
         });
         setRunData(response.data);
       } catch (error) {
+        if (error instanceof AxiosError) {
+          console.log(error?.response?.status);
+          if (error?.response?.status == 403) {
+            setError("403");
+          }
+        }
         console.error("Failed to fetch Run", error);
       }
     };
 
     fetchRundata();
   }, [axiosPrivateInstance, id]);
-  const stats = calcStats(runData.tricks);
-  console.log("runData: ", runData);
+  const stats = calcStats(runData?.tricks);
   const fabStyle = {
     position: "absolute",
     bottom: 100,
     right: 16,
   };
+  if (error == "403") return <> NOT YOUR RUN </>;
 
   return (
     <Grid sx={{ padding: "20px", pt: 0 }}>
-      <h1>Run {runData ? runData.date: "loading"}</h1>
+      <h1>Run {runData ? runData.date : "loading"}</h1>
       {runData ? (
         <>
           <TableContainer component={Paper} elevation={3}>
