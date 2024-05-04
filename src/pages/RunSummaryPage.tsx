@@ -83,7 +83,7 @@ const RunSummary: React.FC = () => {
       {runData ? (
         <>
           <TableContainer component={Paper} elevation={3}>
-            <Table sx={{ minWidth: 200 }} aria-lable="tricks stats table">
+            <Table sx={{ minWidth: 200 }} aria-label="tricks stats table">
               <TableHead>
                 <TableRow>
                   <TableCell>Trick</TableCell>
