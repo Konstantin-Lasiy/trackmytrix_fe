@@ -13,13 +13,21 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { Alert } from "@mui/material";
+import { useLocation } from "react-router-dom";
+import { AxiosError } from "axios";
+
+interface Errors {
+  [key: string]: string;
+}
 
 export default function SignIn() {
   const { setAccessToken, setCSRFToken } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const location = useLocation();
+  const { registered = false } = location?.state || {};
   const navigate = useNavigate();
-  //const location = useLocation();
-  // const fromLocation = location?.state?.from?.pathname || "/";
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -37,11 +45,21 @@ export default function SignIn() {
       setLoading(false);
       // navigate(fromLocation, { replace: true });
       navigate("/");
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      console.error("Registration failed", error);
+      if (error instanceof AxiosError) {
+        const errMessages: Errors = error.response?.data || {
+          generic: "Registration failed, please try again.",
+        };
+        setErrors(errMessages);
+      } else {
+        setErrors({ generic: "Registration failed, please try again." });
+      }
+    } finally {
+      setLoading(false);
     }
   };
-
+  console.log(errors.detail);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -59,6 +77,11 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        {registered && (
+          <Alert sx={{ mt: 2 }} elevation={4} severity="success">
+            Registered! Please log in.
+          </Alert>
+        )}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -69,6 +92,8 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            error={!!errors.email|| !!errors.detail}
+            helperText={errors.email}
           />
           <TextField
             margin="normal"
@@ -79,11 +104,10 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            error={!!errors.password || !!errors.detail}
+            helperText={errors.password}
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
+          {errors.detail && <Alert severity="error">{errors.detail}</Alert>}
           <Button
             type="submit"
             fullWidth
