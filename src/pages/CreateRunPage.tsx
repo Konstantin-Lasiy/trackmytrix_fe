@@ -317,7 +317,13 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
         placeholder="Search tricks..."
         value={searchText}
         onChange={handleSearchChange}
-        sx={{ marginBottom: "10px", mt: "10px", size: "small", width: "100%" }}
+        sx={{
+          marginBottom: "10px",
+          fontSize: "16px",
+          mt: "10px",
+          size: "small",
+          width: "100%",
+        }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
