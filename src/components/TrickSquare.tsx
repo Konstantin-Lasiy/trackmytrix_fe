@@ -60,6 +60,7 @@ const TrickBox = styled(Box)(() => ({
   color: "white",
   overflow: "visible",
   cursor: "pointer",
+  textWrap: "wrap",
 })) as typeof Box;
 
 const littleCircleStyles = {
