@@ -4,17 +4,7 @@ body, html, #root {
     display: flex;
     flex-direction: column;
 }
-html {
-    margin: 0;
-    overflow: hidden;
-    height: 100%
-}
-body {
-    margin: 0;
-    overflow: auto;
-    height: 100%;
-    -webkit-overflow-scrolling: touch;
-}
+
 .main-container {
     flex-grow: 1;
     display: flex;
