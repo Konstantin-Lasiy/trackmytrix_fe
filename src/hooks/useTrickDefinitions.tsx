@@ -8,6 +8,10 @@ const useTrickDefinitions = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+  function isValidDate(dateStr: string): boolean {
+    const date = new Date(dateStr);
+    return !isNaN(date.getTime());
+  }
   useEffect(() => {
     const fetchTrickDefinitions = async () => {
       try {
@@ -19,7 +23,24 @@ const useTrickDefinitions = () => {
           ...trick,
           successful: true,
         }));
-        setTrickDefinitions(loaded_tricks); // Ensure your API returns the data correctly formatted
+        loaded_tricks.sort((a, b) => {
+          // Convert 'last_used' to a timestamp, or to a very old date if invalid
+          const timeA = a.last_used
+            ? isValidDate(a.last_used)
+              ? new Date(a.last_used).getTime()
+              : new Date("1900-01-01").getTime()
+            : 0;
+          const timeB = b.last_used
+            ? isValidDate(b.last_used)
+              ? new Date(b.last_used).getTime()
+              : new Date("1900-01-01").getTime()
+            : 0;
+
+          return timeB - timeA; // Sort descending
+        });
+
+        setTrickDefinitions(loaded_tricks);
+        console.log(loaded_tricks);
       } catch (error) {
         if (error instanceof Error) {
           console.error("Failed to fetch trick definitions:", error);

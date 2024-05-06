@@ -26,6 +26,7 @@ export interface Trick {
   technical_coefficient: number;
   twisted_bonus: number;
   twisted_exit_bonus: number;
+  last_used?: string;
 }
 
 export interface TimelineTrick extends Trick {
