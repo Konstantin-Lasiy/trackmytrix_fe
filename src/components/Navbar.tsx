@@ -86,9 +86,6 @@ export default function MenuAppBar() {
             <MenuItem onClick={handleClose}>
               <NavLink to="/runs/">Runs</NavLink>
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <NavLink to="/user">User</NavLink>
-            </MenuItem>
           </Menu>
 
           <Typography
