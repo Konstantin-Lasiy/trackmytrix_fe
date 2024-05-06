@@ -244,7 +244,7 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
             onDelete={() => onDelete(trick.timeline_id)}
             sx={{
               fontSize: "0.5rem",
-              //textWrap: "wrap",
+              overflowWrap: "break-word",
             }}
             small_sx={{
               fontSize: "0.6rem",
@@ -325,7 +325,10 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
                 onClick={handleClearSearch}
                 edge="end"
                 size="small"
-                style={{paddingRight: "10px", visibility: searchText ? "visible" : "hidden" }} // Hide clear button when no text
+                style={{
+                  paddingRight: "10px",
+                  visibility: searchText ? "visible" : "hidden",
+                }} // Hide clear button when no text
               >
                 <ClearIcon />
               </IconButton>
