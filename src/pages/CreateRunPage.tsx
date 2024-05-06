@@ -364,6 +364,7 @@ const TrickManagement: React.FC = () => {
     tricks: TimelineTrick[];
   }
   const SubmitButton: React.FC<submitButtonProps> = ({ tricks }) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const axiosPrivateInstance = useAxiosPrivate();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const filteredTricks = tricks.map(
@@ -382,6 +383,7 @@ const TrickManagement: React.FC = () => {
       }
 
       try {
+        setIsSubmitting(true);
         const response = await axiosPrivateInstance.post("api/upload_tricks/", {
           filteredTricks,
         });
@@ -408,6 +410,8 @@ const TrickManagement: React.FC = () => {
           console.error("Unknown Error", error);
           alert("Failed to submit: unknown error occured.");
         }
+      } finally {
+        setIsSubmitting(false);
       }
     };
 
@@ -426,8 +430,9 @@ const TrickManagement: React.FC = () => {
           zIndex: 1500 /* Ensures it stays on top */,
         }}
         onClick={handleSubmit}
+        disabled={isSubmitting}
       >
-        Submit
+        {isSubmitting ? "Submitting..." : "Submit"} 
       </Button>
     );
   };
