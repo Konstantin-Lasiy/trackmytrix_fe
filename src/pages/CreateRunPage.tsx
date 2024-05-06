@@ -12,6 +12,7 @@ import { styled } from "@mui/material/styles";
 import { StrictModeDroppable } from "../components/droppable/strick_droppable";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
+import { TextField } from "@mui/material";
 
 const StyledToggleButton = styled(ToggleButton)(() => ({
   width: "100px",
@@ -268,6 +269,7 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
   addTrickToHistory,
   setTrickDefinitions,
 }) => {
+  const [searchText, setSearchText] = useState("");
   const onDragEnd = (result: DropResult): void => {
     if (!result.destination) {
       return;
@@ -281,9 +283,24 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
 
     setTrickDefinitions(updatedTricks);
   };
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value);
+  };
+
+  // Filter tricks based on search text
+  const filteredTricks = tricks.filter(
+    (trick) => trick.name.toLowerCase().includes(searchText.toLowerCase()) // Adjust this to the appropriate property and comparison
+  );
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      <TextField
+        variant="standard"
+        placeholder="Search tricks..."
+        value={searchText}
+        onChange={handleSearchChange}
+        sx={{ marginBottom: "10px",mt: "10px", size:"small", width: "100%" }} 
+      />
       <StrictModeDroppable droppableId="droppable-trick-list">
         {(provided) => (
           <Box
@@ -296,7 +313,7 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
               gap: "10px",
             }}
           >
-            {tricks.map((trick, index) => (
+            {filteredTricks.map((trick, index) => (
               <Draggable
                 key={trick.id.toString()}
                 draggableId={trick.id.toString()}
@@ -330,8 +347,7 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
 };
 
 const TrickManagement: React.FC = () => {
-  const { trickDefinitions, isLoading, setTrickDefinitions } =
-    useTrickDefinitions();
+  const { trickDefinitions, setTrickDefinitions } = useTrickDefinitions();
   const [trickTimeline, setTrickTimeline] = useState<TimelineTrick[]>([]);
   const [addCount, setAddCount] = useState(0);
   const navigate = useNavigate();
@@ -341,7 +357,6 @@ const TrickManagement: React.FC = () => {
       trickTimeline.filter((trick) => trick.timeline_id !== timeline_id)
     );
   };
-  if (isLoading) return <p></p>;
 
   const toggleProperty = (property: keyof Trick) => (trick: Trick) => {
     const updatedTricks = trickDefinitions.map((t) => {
@@ -352,7 +367,6 @@ const TrickManagement: React.FC = () => {
     });
     setTrickDefinitions(updatedTricks);
   };
-  if (isLoading) return <p>Loading tricks...</p>;
   const addTrickToHistory = (trickToAdd: Trick) => {
     const uniqueId = `${trickToAdd.id}-${addCount}`; // Create a unique ID using a counter
     const newTrick: TimelineTrick = { ...trickToAdd, timeline_id: uniqueId };
@@ -390,7 +404,6 @@ const TrickManagement: React.FC = () => {
         if (response.status === 200 || response.status === 201) {
           console.log("Success", response.data);
           if (response.data.run_id) {
-            console.log("Has ID");
             navigate("/runs/" + response.data.run_id);
           }
         } else {
@@ -432,7 +445,7 @@ const TrickManagement: React.FC = () => {
         onClick={handleSubmit}
         disabled={isSubmitting}
       >
-        {isSubmitting ? "Submitting..." : "Submit"} 
+        {isSubmitting ? "Submitting..." : "Submit"}
       </Button>
     );
   };

@@ -9,4 +9,7 @@
 .run-container {
     padding-bottom: 60px;
     padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 200px); /* to push search bar up. 200px is for navbar and timeline.
 } 

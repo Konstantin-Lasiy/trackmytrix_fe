@@ -40,7 +40,6 @@ const useTrickDefinitions = () => {
         });
 
         setTrickDefinitions(loaded_tricks);
-        console.log(loaded_tricks);
       } catch (error) {
         if (error instanceof Error) {
           console.error("Failed to fetch trick definitions:", error);
