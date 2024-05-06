@@ -3,7 +3,16 @@ import Box from "@mui/material/Box";
 import * as React from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { Trick, TrickSquare, TimelineTrick } from "../components/TrickSquare";
-import { Card, Button, ToggleButtonGroup, ToggleButton } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+import {
+  Card,
+  Button,
+  ToggleButtonGroup,
+  ToggleButton,
+  TextField,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import "./CreateRunPage.css";
 import axios from "axios";
@@ -12,7 +21,6 @@ import { styled } from "@mui/material/styles";
 import { StrictModeDroppable } from "../components/droppable/strick_droppable";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
-import { TextField } from "@mui/material";
 
 const StyledToggleButton = styled(ToggleButton)(() => ({
   width: "100px",
@@ -288,6 +296,11 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
 
     setTrickDefinitions(updatedTricks);
   };
+
+  const handleClearSearch = () => {
+    setSearchText("");
+  };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
   };
@@ -305,6 +318,20 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
         value={searchText}
         onChange={handleSearchChange}
         sx={{ marginBottom: "10px", mt: "10px", size: "small", width: "100%" }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={handleClearSearch}
+                edge="end"
+                size="small"
+                style={{paddingRight: "10px", visibility: searchText ? "visible" : "hidden" }} // Hide clear button when no text
+              >
+                <ClearIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
       <StrictModeDroppable droppableId="droppable-trick-list">
         {(provided) => (
