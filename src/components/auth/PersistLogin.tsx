@@ -29,11 +29,10 @@ export default function PersistLogin() {
     }
 
     !accessToken ? verifyUser() : setLoading(false);
-
     return () => {
       isMounted = false;
     };
   }, [accessToken, axiosPrivate, refresh, setUser]);
 
-  return loading ? "Loading" : <Outlet />;
+  return loading ? "" : <Outlet />;
 }
