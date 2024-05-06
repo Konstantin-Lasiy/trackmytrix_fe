@@ -243,8 +243,8 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
             trick={trick}
             onDelete={() => onDelete(trick.timeline_id)}
             sx={{
-              fontSize: "0.6rem",
-              textWrap: "wrap",
+              fontSize: "0.5rem",
+              //textWrap: "wrap",
             }}
             small_sx={{
               fontSize: "0.6rem",
