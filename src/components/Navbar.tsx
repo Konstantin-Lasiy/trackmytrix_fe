@@ -11,7 +11,7 @@ import useAuth from "../hooks/useAuth";
 import { Box } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Logout } from "@mui/icons-material";
+import { Logout, AccountBox } from "@mui/icons-material";
 import useLogout from "../hooks/useLogout";
 
 export default function MenuAppBar() {
@@ -124,9 +124,18 @@ export default function MenuAppBar() {
                 open={Boolean(accountAnchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={goToProfile}>Profile</MenuItem>
-                <MenuItem onClick={handleLogout}>
-                  <Logout />
+                <MenuItem
+                  onClick={goToProfile}
+                  sx={{ justifyContent: "flex-start" }}
+                >
+                  <AccountBox sx={{ mr: 1 }} /> Profile
+                </MenuItem>
+                <MenuItem
+                  onClick={handleLogout}
+                  sx={{ justifyContent: "flex-start" }}
+                >
+                  <Logout sx={{ mr: 1 }} />
+                  Logout
                 </MenuItem>
               </Menu>
             </div>
