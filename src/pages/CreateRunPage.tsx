@@ -344,8 +344,8 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              marginTop: "10px",
-              gap: "10px",
+              marginTop: "5px",
+              gap: "7px",
             }}
           >
             {filteredTricks.map((trick, index) => (
@@ -359,7 +359,6 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    sx={{ marginBottom: "8px" }}
                   >
                     <TrickAddition
                       trick={trick}
