@@ -13,6 +13,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Skeleton,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { AxiosError } from "axios";
@@ -35,15 +36,43 @@ interface RunData {
 
 const calcStats = (
   tricks: TrickInstance[] | undefined
-): Record<string, number> => {
-  const trickCounts: Record<string, number> = {};
+): Record<
+  string,
+  { count: number; successes: number; success_rate?: number }
+> => {
+  const stats: Record<
+    string,
+    { count: number; successes: number; success_rate?: number }
+  > = {};
+
   tricks?.forEach((trick) => {
     const trickName = trick.trick_definition.name;
-    trickCounts[trickName] = (trickCounts[trickName] || 0) + 1;
-  });
-  return trickCounts;
-};
 
+    // Initialize the stats object for trickName if it doesn't exist
+    if (!stats[trickName]) {
+      stats[trickName] = { count: 0, successes: 0, success_rate: 0 };
+    }
+
+    // Increment count
+    stats[trickName].count += 1;
+
+    // Increment successes if the trick was successful
+    if (trick.successful) {
+      stats[trickName].successes += 1;
+    }
+  });
+
+  // Calculate success rates
+  Object.keys(stats).forEach((key) => {
+    if (stats[key].count > 0) {
+      // Ensure we do not divide by zero
+      stats[key].success_rate = Math.round(
+        (stats[key].successes / stats[key].count) * 100
+      );
+    }
+  });
+  return stats;
+};
 const RunSummary: React.FC = () => {
   const { id } = useParams();
   const axiosPrivateInstance = useAxiosPrivate();
@@ -55,6 +84,10 @@ const RunSummary: React.FC = () => {
         const response = await axiosPrivateInstance.get("api/runs/" + id, {
           withCredentials: true,
         });
+        const delay = 1000;
+        if (import.meta.env.VITE_DELAY_REQUESTS == "true") {
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
         setRunData(response.data);
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -76,10 +109,13 @@ const RunSummary: React.FC = () => {
     right: 16,
   };
   if (error == "403") return <> NOT YOUR RUN </>;
-
+  const skeletons = [];
+  for (let i = 0; i < 3; i++) {
+    skeletons.push(<Skeleton height={40} />);
+  }
   return (
     <Grid sx={{ padding: "20px", pt: 0 }}>
-      <h1>Run {runData ? runData.date : "loading"}</h1>
+      <h1>Run {runData ? runData.date : ""}</h1>
       {runData ? (
         <>
           <TableContainer component={Paper} elevation={3}>
@@ -88,18 +124,20 @@ const RunSummary: React.FC = () => {
                 <TableRow>
                   <TableCell>Trick</TableCell>
                   <TableCell align="right">Count</TableCell>
+                  <TableCell align="right">Success %</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Object.entries(stats).map(([key, value], index) => (
+                {Object.entries(stats).map(([trick, stat], index) => (
                   <TableRow
                     key={index}
                     sx={{ "&last-child td, &last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {key}
+                      {trick}
                     </TableCell>
-                    <TableCell align="right">{value}</TableCell>
+                    <TableCell align="right">{stat["count"]}</TableCell>
+                    <TableCell align="right">{stat["success_rate"]}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -117,16 +155,13 @@ const RunSummary: React.FC = () => {
           </ul>
         </>
       ) : (
-        <p>Nothing Yet.</p>
+        skeletons
       )}
 
       <Fab
         component={Link}
         to="/createrun"
         sx={{
-          //   display: "flex",
-          //   alignItems: "center",
-          //   justifyContent: "center",
           ...fabStyle,
         }}
         color="primary"
