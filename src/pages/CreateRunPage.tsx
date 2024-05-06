@@ -220,9 +220,9 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
         display: "flex",
         flexDirection: "row",
         overflowX: "auto",
-        whiteSpace: "nowrap",
+        //whiteSpace: "nowrap",
         maxWidth: "100%", // Ensure the container does not grow beyond the viewport width
-        flexWrap: "nowrap",
+        //flexWrap: "nowrap",
         "& > *": { flex: "0 0 auto" }, // Prevents flex items from shrinking
         height: "80px", // Fixed height to prevent vertical expansion
         position: "sticky",
