@@ -59,7 +59,10 @@ const RunList: React.FC = () => {
         runData.map((run) => (
           <li key={run.id}>
             {" "}
-            <Link to="/runs/$run_id">{run.date}: {run.tricks.length} : {run.user} </Link>
+            <Link to={`/runs/${run.id}`}>
+              {" "}
+              {run.tricks.length} : {run.user}{" "}
+            </Link>
           </li>
         ))
       ) : (
