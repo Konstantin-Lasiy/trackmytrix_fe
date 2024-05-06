@@ -104,6 +104,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
           flexWrap: "wrap",
           overflow: "hidden",
           width: "100%",
+          alignItems: "center",
         }}
       >
         <ToggleButtonGroup fullWidth>
@@ -115,6 +116,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
               borderRadius: "0",
               bordercolor: "grey",
               fontSize: "0.8rem",
+              maxHeight: "75px",
             }}
             {...(!trick.has_orientation ? { disabled: true } : {})}
           >
@@ -126,6 +128,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             onChange={() => handleToggle("successful")}
             sx={{
               width: "25%",
+              maxHeight: "75px",
             }}
           >
             <Typography
@@ -143,6 +146,8 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             onChange={() => handleToggle("reverse")}
             sx={{
               width: "25%",
+              height: "75px",
+              
             }}
             {...(trick.reverse_bonus == 0 ? { disabled: true } : {})}
           >
@@ -162,6 +167,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             sx={{
               width: "25%",
               borderRadius: "0",
+              maxHeight: "75px",
             }}
             {...(trick.twisted_bonus == 0 ? { disabled: true } : {})}
           >
@@ -352,7 +358,7 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
               display: "flex",
               flexDirection: "column",
               marginTop: "5px",
-              gap: "7px",
+              gap: "2px",
             }}
           >
             {filteredTricks.map((trick, index) => (
