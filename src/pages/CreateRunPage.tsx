@@ -90,8 +90,8 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
         trick={trick}
         onClick={() => addTrickToHistory(trick)}
         sx={{
-          minWidth: "80px",
-          height: "80px",
+          minWidth: "75px",
+          height: "75px",
           fontSize: "1rem",
         }}
       />
@@ -243,6 +243,8 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
             trick={trick}
             onDelete={() => onDelete(trick.timeline_id)}
             sx={{
+              minWidth: "50px",
+              height: "50px",
               fontSize: "0.5rem",
               overflowWrap: "break-word",
             }}
