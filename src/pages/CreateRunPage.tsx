@@ -16,6 +16,7 @@ import { TextField } from "@mui/material";
 
 const StyledToggleButton = styled(ToggleButton)(() => ({
   width: "100px",
+  fontSize: "9px",
   "&.Mui-disabled": {
     "& .MuiTypography-root": {
       opacity: 0.15, // Setting opacity to show the button is disabled but keep text more readable
@@ -104,6 +105,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
               width: "25%",
               borderRadius: "0",
               bordercolor: "grey",
+              fontSize: "0.8rem",
             }}
             {...(!trick.has_orientation ? { disabled: true } : {})}
           >
@@ -120,6 +122,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             <Typography
               sx={{
                 textDecoration: isSuccessful ? "inherit" : "line-through",
+                fontSize: "0.8rem",
               }}
             >
               Success
@@ -137,6 +140,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             <Typography
               sx={{
                 textDecoration: isReverse ? "inherit" : "line-through",
+                fontSize: "0.8rem",
               }}
             >
               Reverse
@@ -155,6 +159,7 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
             <Typography
               sx={{
                 textDecoration: isTwisted ? "inherit" : "line-through",
+                fontSize: "0.8rem",
               }}
             >
               Twisted
@@ -230,7 +235,7 @@ const TrickTimeline: React.FC<TrickTimelineProps> = ({ tricks, onDelete }) => {
             trick={trick}
             onDelete={() => onDelete(trick.timeline_id)}
             sx={{
-              fontSize: "0.7rem",
+              fontSize: "0.6rem",
               textWrap: "wrap",
             }}
             small_sx={{
@@ -299,7 +304,7 @@ const AvailableTrickList: React.FC<AvailableTrickListProps> = ({
         placeholder="Search tricks..."
         value={searchText}
         onChange={handleSearchChange}
-        sx={{ marginBottom: "10px",mt: "10px", size:"small", width: "100%" }} 
+        sx={{ marginBottom: "10px", mt: "10px", size: "small", width: "100%" }}
       />
       <StrictModeDroppable droppableId="droppable-trick-list">
         {(provided) => (
