@@ -93,6 +93,7 @@ export const TrickSquare: React.FC<TrickSquareProps> = ({
           ? "linear-gradient(-39deg, #4991f8 0%, #4bc1ff 0%)"
           : "linear-gradient(-39deg, #ff4a4a 0%, #ff7f7f 80%)",
         textAlign: "center",
+        textTransform: "uppercase",
         ...sx,
       }}
       onClick={onClick}

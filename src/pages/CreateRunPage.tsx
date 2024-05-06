@@ -92,7 +92,8 @@ const TrickAddition: React.FC<TrickModifierProps> = ({
         sx={{
           minWidth: "75px",
           height: "75px",
-          fontSize: "1rem",
+          fontSize: "0.8rem",
+          fontFamily: "sans-serif"
         }}
       />
       <Box
